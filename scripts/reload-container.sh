@@ -23,6 +23,5 @@ docker run --name $CONTAINER_NAME \
     $ARGUMENT_RESTART_CONTAINER \
     -d \
     -p $PORT:8080 \
-    -v ~/.cdocker/vlm/me-go/ssr:/usr/bin/ssr \
-    alpine:3.11.3 \
-    ssr
+    me-go \
+    ./ssr
