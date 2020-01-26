@@ -23,6 +23,6 @@ docker run --name $CONTAINER_NAME \
     $ARGUMENT_RESTART_CONTAINER \
     -d \
     -p $PORT:8080 \
-    -v ~/.cdocker/vlm/me-go/index.html:/home/go/index.html \
+    -v ~/.cdocker/vlm/me-go/pages:/home/go/pages \
     me-go \
     ./ssr

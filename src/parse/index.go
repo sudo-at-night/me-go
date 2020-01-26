@@ -28,12 +28,12 @@ func GetIndexContent(path string) (string, error) {
 
 // CacheIndex caches the initial index.[hash].html every 5 minutes
 func CacheIndex() {
-	match, err := filepath.Glob("index.*.html")
+	match, err := filepath.Glob("pages/index.*.html")
 	if err != nil {
 		log.Fatal(err)
 	}
 	if len(match) < 1 {
-		log.Fatal("No template index.[hash].html found")
+		log.Fatal("No pages/index.[hash].html template found")
 	}
 	if match[0] != cacheIndexName {
 		html, err := ioutil.ReadFile(match[0])
