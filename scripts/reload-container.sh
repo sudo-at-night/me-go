@@ -22,6 +22,7 @@ echo "Starting container: '$CONTAINER_NAME'"
 docker run --name $CONTAINER_NAME \
     $ARGUMENT_RESTART_CONTAINER \
     -d \
+    --network me \
     -p $PORT:8080 \
     -v ~/.cdocker/vlm/me-go/pages:/home/go/pages \
     me-go \
