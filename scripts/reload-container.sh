@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINER_NAME=me-go
-PORT=8081
+PORT=8082
 ARGUMENT_RESTART_CONTAINER=
 
 if [ -z "$1" ] || [ "$1" != "--production" ]; then
