@@ -4,14 +4,20 @@ My personal website's SSR code lives here. This server is used to return meta ta
 # Run container
 ```bash
 # Run dev container
-./scripts/reload-container.sh
+docker-compose -f docker/compose.dev.yml up -d
 
 # Run production container
-./scripts/reload-container.sh --production
+docker-compose -f docker/compose.prod.yml up -d
 ```
 
 # Build application
 ```bash
 # Build the application into binary executable called "ssr"
-./scripts/build.sh
+./scripts/build-go.sh
+```
+
+# Build image
+```bash
+# Build docker image for later reuse
+./scripts/build-image.sh
 ```
