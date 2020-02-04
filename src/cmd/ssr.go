@@ -17,7 +17,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	go parse.CacheIndex()
+	parse.CacheIndex()
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }

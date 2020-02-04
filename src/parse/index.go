@@ -1,19 +1,17 @@
 package parse
 
 import (
+	"github.com/sudo-at-night/me-go/src/cache"
+
 	"errors"
-	"io/ioutil"
 	"log"
 	"path/filepath"
 	"strings"
-	"time"
 )
-
-var cacheIndexName string = ""
-var cacheIndex string = ""
 
 // GetIndexContent retrieves the final index.html content to be returned to the user.
 func GetIndexContent(path string) (string, error) {
+	cacheManager := cache.GetManager()
 	meta, err := GetMeta(path)
 	if err != nil {
 		if errors.Is(err, errMeta404) {
@@ -22,12 +20,17 @@ func GetIndexContent(path string) (string, error) {
 			log.Fatal("Cannot fetch any meta data")
 		}
 	}
-	newHTML := strings.Replace(cacheIndex, "<!-- SSR-HEAD -->", meta, 1)
+	index, err := cacheManager.GetFile("index")
+	if err != nil {
+		log.Fatalf("Cannot get index from cache: %s", err)
+	}
+	newHTML := strings.Replace(string(index), "<!-- SSR-HEAD -->", meta, 1)
 	return newHTML, nil
 }
 
 // CacheIndex caches the initial index.[hash].html every 5 minutes
 func CacheIndex() {
+	cacheManager := cache.GetManager()
 	match, err := filepath.Glob("pages/index.*.html")
 	if err != nil {
 		log.Fatal(err)
@@ -35,14 +38,7 @@ func CacheIndex() {
 	if len(match) < 1 {
 		log.Fatal("No pages/index.[hash].html template found")
 	}
-	if match[0] != cacheIndexName {
-		html, err := ioutil.ReadFile(match[0])
-		if err != nil {
-			log.Fatal(err)
-		}
-		cacheIndexName = match[0]
-		cacheIndex = string(html)
+	if cacheManager.CacheFile(match[0], "index"); err != nil {
+		log.Fatalf("Could not properly load and cache pages/index.[hash].html: %s", err)
 	}
-	time.Sleep(300000 * time.Millisecond)
-	CacheIndex()
 }
