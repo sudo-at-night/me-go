@@ -28,7 +28,7 @@ func GetIndexContent(path string) (string, error) {
 	return newHTML, nil
 }
 
-// CacheIndex caches the initial index.[hash].html every 5 minutes
+// CacheIndex caches the initial index.[hash].html
 func CacheIndex() {
 	cacheManager := cache.GetManager()
 	match, err := filepath.Glob("pages/index.*.html")
