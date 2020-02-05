@@ -6,6 +6,9 @@ services:
             - "8082:8080"
         volumes:
             - me-go-pages:/home/go/pages
+            - me-ssl:/home/go/.ssl
 volumes:
     me-go-pages:
+        external: true
+    me-ssl:
         external: true
