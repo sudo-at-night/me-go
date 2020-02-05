@@ -2,8 +2,6 @@ version: '3'
 services:
     me-go:
         image: me-go:latest
-        ports:
-            - "8082:8080"
         volumes:
             - me-go-pages:/home/go/pages
             - me-ssl:/home/go/.ssl
