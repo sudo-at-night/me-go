@@ -1,0 +1,56 @@
+name: Deploy
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: '1.13.6'
+      - name: Build Docker image
+        run: |
+          scripts/build-go.sh
+          scripts/build-image.sh --save
+      - name: Archive built image
+        uses: actions/upload-artifact@v1
+        with:
+          name: image
+          path: files/image
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v1
+        with:
+          go-version: '1.13.6'
+      - name: Download pre-built image file
+        uses: actions/download-artifact@v1
+        with:
+          name: image
+          path: files/image
+      - name: Setup SSH Key
+        uses: webfactory/ssh-agent@v0.1.1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+      - name: Add remote host to known_hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+      - name: Prepare Stack Up
+        run: |
+          go get github.com/pressly/sup/cmd/sup
+          export SSH_USER=${{ secrets.SSH_USER }}
+          export SSH_HOST=${{ secrets.SSH_HOST }}
+          envsubst < sup/Supfile.template.yml > sup/Supfile.yml
+      - name: Deploy
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          sup -f sup/Supfile.yml production deploy

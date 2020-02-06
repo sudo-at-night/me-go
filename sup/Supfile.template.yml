@@ -1,0 +1,29 @@
+networks:
+    production:
+        hosts:
+            - ${SSH_USER}@${SSH_HOST}
+commands:
+    stop-containers:
+        desc: Stop all containers
+        run: .cdocker/compose/me-compose/stop-containers.sh
+    upload:
+        desc: Upload built image
+        upload:
+            - src: ./files/image
+              dst: .cdocker/files/me-go/
+    load-image:
+        desc: Load freshly built image on the server 
+        run: docker load .cdocker/files/me-go/image/me-go.tar
+    start-containers:
+        desc: Start all containers
+        run: .cdocker/compose/me-compose/start-containers.sh
+    cleanup-image:
+        desc: Remove uploaded image from server
+        run: rm -rf .cdocker/files/me-go/image
+targets:
+    deploy:
+        - stop-containers
+        - upload
+        - load-image
+        - start-containers
+        - cleanup-image
