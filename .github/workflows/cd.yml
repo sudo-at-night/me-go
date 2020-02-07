@@ -28,6 +28,11 @@ jobs:
         with:
           name: supfile
           path: sup
+      - name: Archive compose files
+        uses: actions/upload-artifact@v1
+        with:
+          name: compose
+          path: docker
   deploy:
     name: Deploy
     needs: build
@@ -47,6 +52,11 @@ jobs:
         with:
           name: supfile
           path: sup
+      - name: Download compose files
+        uses: actions/download-artifact@v1
+        with:
+          name: compose
+          path: docker
       - name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.1.1
         with:
