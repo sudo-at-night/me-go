@@ -19,7 +19,7 @@ commands:
         run: .cdocker/compose/me-compose/stop-containers.sh
     load-image:
         desc: Load freshly built image on the server 
-        run: docker load .cdocker/files/me-go/image/me-go.tar
+        run: docker load -i .cdocker/files/me-go/image/me-go.tar
     start-containers:
         desc: Start all containers
         run: .cdocker/compose/me-compose/start-containers.sh
