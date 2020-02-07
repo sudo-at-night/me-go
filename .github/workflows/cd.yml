@@ -1,4 +1,4 @@
-name: Deploy
+name: Build and Deploy
 on:
   push:
     branches:
@@ -33,11 +33,6 @@ jobs:
         uses: actions/setup-go@v1
         with:
           go-version: '1.13.6'
-      - name: Download pre-built image file
-        uses: actions/download-artifact@v1
-        with:
-          name: image
-          path: files/image
       - name: Setup SSH Key
         uses: webfactory/ssh-agent@v0.1.1
         with:
@@ -51,6 +46,11 @@ jobs:
           export SSH_USER=${{ secrets.SSH_USER }}
           export SSH_HOST=${{ secrets.SSH_HOST }}
           envsubst < sup/Supfile.template.yml > sup/Supfile.yml
+      - name: Download pre-built image file
+        uses: actions/download-artifact@v1
+        with:
+          name: image
+          path: files/image
       - name: Deploy
         run: |
           export PATH=$PATH:$(go env GOPATH)/bin
