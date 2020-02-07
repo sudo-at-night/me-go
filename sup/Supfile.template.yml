@@ -3,14 +3,20 @@ networks:
         hosts:
             - ${SSH_USER}@${SSH_HOST}
 commands:
-    stop-containers:
-        desc: Stop all containers
-        run: .cdocker/compose/me-compose/stop-containers.sh
-    upload:
+    upload-image:
         desc: Upload built image
         upload:
             - src: ./files/image
               dst: .cdocker/files/me-go/
+    upload-compose:
+        desc: Upload compose file
+        upload:
+            - src: ./docker/compose.prod.yml
+              dst: .cdocker/compose/me-go
+        run: mv .cdocker/compose/me-go/docker/compose.prod.yml .cdocker/compose/me-go/compose.yml && rm -rf .cdocker/compose/me-go/docker
+    stop-containers:
+        desc: Stop all containers
+        run: .cdocker/compose/me-compose/stop-containers.sh
     load-image:
         desc: Load freshly built image on the server 
         run: docker load .cdocker/files/me-go/image/me-go.tar
@@ -22,8 +28,9 @@ commands:
         run: rm -rf .cdocker/files/me-go/image
 targets:
     deploy:
+        - upload-image
+        - upload-compose
         - stop-containers
-        - upload
         - load-image
         - start-containers
         - cleanup-image
