@@ -25,7 +25,7 @@ commands:
         run: .cdocker/compose/me-compose/start-containers.sh
     cleanup-image:
         desc: Remove uploaded image from server
-        run: rm -rf .cdocker/files/me-go/image
+        run: rm -rf .cdocker/files/me-go/files
 targets:
     deploy:
         - upload-image
