@@ -1,6 +1,9 @@
 # About
 My personal website's SSR code lives here. This server is used to return meta tags in the initial HTML which is crucial for tools like Open Graph.
 
+> :warning: **DEPRECATED:** My personal website is now located at [sudo-at-night/me-next](https://github.com/sudo-at-night/me-next).  
+> This repository is no longer in use.
+
 # Run container
 ```bash
 # Run dev container
